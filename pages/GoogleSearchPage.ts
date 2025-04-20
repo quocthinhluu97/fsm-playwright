@@ -31,15 +31,16 @@ export class GoogleSearchPage {
         await this.page.press('textarea[name="q"]', 'Enter');
     }
 
-    async verifyOnSearchPage() {
+    async verifyIdle() {
         await expect(this.page.url()).toContain('https://www.google.com');
+        await expect(this.searchInput).toBeVisible();
     }
 
-    async verifyValidSearchResults() {
+    async verifyResultsFound() {
         await expect(this.searchResults).toBeVisible();
     }
 
-    async verifyNoResults() {
+    async verifyNoResultsFound() {
         await expect(this.noResultsMessage).toBeVisible();
     }
 }
