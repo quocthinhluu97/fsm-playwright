@@ -1,52 +1,59 @@
 import { createMachine } from 'xstate';
-import { GOOGLE_SEARCH_EVENTS } from './GoogleSearchEvents';
 import { createModel } from '@xstate/test';
 import { GoogleSearchPage } from '../pages/GoogleSearchPage';
 
-const googleSearchMachine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5RQPYqgGzAZTAQwCcBjACwDoBLCLAYgAUBRAJQDEB5JgWQH1sGBBJgGEAEgG0ADAF1EoAA4pYFAC4UUAO1kgAHogCMADgBsAGhABPRACYAzDbITHEvQFYrLgwHYDATglGAXwCzVHQsXEJSSmowemZ2Lm4ASQA5ADV+ABkkgBFeAWFxaS0FJVUNLV0EQ1MLfRsrBydXdy9ffyCQtEwcfGJyAjgAVwxlWBYUIfUIGiYGPgAVfMFRSRkkEFKVNU0NqqtPTzIXHxtvCRc9TxdvPTNLaoNGl2a3D28-QOCQUJ6I-rI6hQTGGo1gs3mDCWfBWRXW8kU2wqe2sh2Op3Ol2ut3uiAMemOQW+QIgcC0v3CfVIJUR5V2oCqAFpag9mZ0ft1KZFyFQsDSyjtKogACxWXEIKx6HxkHwvZxvNp+Fzsim9blkQawEZjCZTCD8pH0nQilxGMhXKUXLE3fHiqwHGV6IxGfE+dzClw3ZXfVX-KJAkFasEGulChAes0WpXWnF1BA+I7uJwvYxWIw2CQ2IkBIA */
-    predictableActionArguments: true,
-    id: 'googleSearch',
-    initial: 'IDLE',
-    states: {
-        IDLE: {
-            meta: {
-                test: async ({ page }: { page: GoogleSearchPage }) => {
-                    await page.verifyIdle();
-                }
+export const createGoogleSearchModel = (page: GoogleSearchPage) => {
+    const machine = createMachine({
+        predictableActionArguments: true,
+        id: 'googleSearch',
+        initial: 'IDLE',
+        states: {
+            IDLE: {
+                meta: {
+                    test: async () => await page.verifyIdle()
+                },
+                on: {
+                    PERFORM_SEARCH: 'RESULTS_FOUND',
+                    PERFORM_INVALID_SEARCH: 'NO_RESULTS_FOUND',
+                },
             },
-            on: {
-                PERFORM_SEARCH: 'RESULTS_FOUND',
-                PERFORM_INVALID_SEARCH: 'NO_RESULTS_FOUND',
+            RESULTS_FOUND: {
+                meta: {
+                    test: async () => await page.verifyResultsFound()
+                },
+                on: {
+                    RESET_SEARCH: 'IDLE',
+                },
             },
-        },
-        RESULTS_FOUND: {
-            meta: {
-                test: async ({ page }: { page: GoogleSearchPage }) => {
-                    await page.verifyResultsFound();
-                }
-            },
-            on: {
-                RESET_SEARCH: 'IDLE',
-            },
-        },
-        NO_RESULTS_FOUND: {
-            meta: {
-                test: async ({ page }: { page: GoogleSearchPage }) => {
-                    await page.verifyNoResultsFound();
-                }
-            },
-            on: { 
-                RESET_SEARCH: 'IDLE' 
+            NO_RESULTS_FOUND: {
+                meta: {
+                    test: async () => await page.verifyNoResultsFound()
+                },
+                on: { 
+                    RESET_SEARCH: 'IDLE' 
+                },
             },
         },
-    },
-}); 
+    });
 
-const googleSearchModel = createModel(googleSearchMachine).withEvents({...GOOGLE_SEARCH_EVENTS});
+    const model = createModel(machine).withEvents({
+        PERFORM_SEARCH: async () => {
+            const validSearchTerm = 'Playwright';
+            await page.search(validSearchTerm);
+        },
+        PERFORM_INVALID_SEARCH: async () => {
+            const invalidSearchTerm = 'sdafsdafasdflkj1u24oiu124';
+            await page.search(invalidSearchTerm);
+        },
+        RESET_SEARCH: async () => {
+            await page.goto();
+        }
+    });
 
-export const googleSearchShortestPathPlans = googleSearchModel.getSimplePathPlans();   
+    return model;
+};
 
-export default {
-    googleSearchShortestPathPlans
-}
+export const getShortestPathPlans = (page: GoogleSearchPage) => {
+    const model = createGoogleSearchModel(page);
+    return model.getSimplePathPlans();
+}; 

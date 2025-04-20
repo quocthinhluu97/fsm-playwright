@@ -1,19 +1,19 @@
 import { test, Page } from '@playwright/test';
-import { GoogleSearchPage } from '../pages/GoogleSearchPage';
-import { googleSearchShortestPathPlans } from '../state-machines/google-search/GoogleSearchMachine';
+import { LoginPage } from '../pages/Login.page';
+import { saucedemoSimplePathPlans } from '../state-machines/saucedemo/saucedemo.machine';
 
 let page: Page;
-let googleSearchPage: GoogleSearchPage;
+let loginPage: LoginPage;
 
-test.describe('Google Search State Machine Coverage Tests', () => {
+test.describe('Sauce Demo State Machine Coverage Tests', () => {
     test.beforeAll(async ({ browser }) => {
         const context = await browser.newContext();
         page = await context.newPage();
-        googleSearchPage = new GoogleSearchPage(page);
+        loginPage = new LoginPage(page);
     });
 
     test.beforeEach(async () => {
-        await googleSearchPage.goto();
+        await loginPage.navigate();
     });
 
     test.afterAll(async ({ browser }) => {
@@ -22,20 +22,22 @@ test.describe('Google Search State Machine Coverage Tests', () => {
     });
 
 
-    for (const plan of googleSearchShortestPathPlans) {
+
+
+    for (const plan of saucedemoSimplePathPlans) {
         test.describe(`${plan.description}`, () => {
             for (const path of plan.paths) {
                 test(path.description, async () => {
-                    await path.test(googleSearchPage);
+                    await path.test(loginPage);
                 });
             }
         });
     }
-    // // Create the test model
-    // // const googleSearchMachine = createGoogleSearchMachine(googleSearchPage);
-    // // const events = createGoogleSearchEvents(googleSearchPage);
+    // Create the test model
+    // const googleSearchMachine = createGoogleSearchMachine(googleSearchPage);
+    // const events = createGoogleSearchEvents(googleSearchPage);
     
-    // // const testModel = createModel(googleSearchMachine).withEvents(events);
+    // const testModel = createModel(googleSearchMachine).withEvents(events);
 
     // test('should handle multiple searches without reset', async () => {
     //     const searchMachine = createMachine(createGoogleSearchMachine);
