@@ -1,5 +1,5 @@
 import { test, Page } from '@playwright/test';
-import { LoginPage } from '../pages/login.page';
+import { LoginPage } from '../pages/saucedemo/login.page';
 import { saucedemoSimplePathPlans, saucedemoShortestPathPlans } from '../state-machines/saucedemo/saucedemo.machine';
 
 let page: Page;

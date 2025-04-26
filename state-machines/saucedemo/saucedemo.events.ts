@@ -1,5 +1,5 @@
-import { LoginPage } from "../../pages/login.page";
-import { MenuComponent } from "../../pages/menu.component";
+import { LoginPage } from "../../pages/saucedemo/login.page";
+import { MenuComponent } from "../../pages/saucedemo/menu.component";
 
 
 export const saucedemoEvents = ({

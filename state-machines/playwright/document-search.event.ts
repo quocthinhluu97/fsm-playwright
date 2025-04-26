@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { DocumentSearchPage } from "../../pages/document-search.page";
+import { DocumentSearchPage } from "../../pages/playwright/document-search.page";
 
 const documentSearchEvent = ({
     PERFORM_SEARCH: async (documentSearchPage: DocumentSearchPage) => {

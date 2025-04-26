@@ -1,4 +1,4 @@
-import { DocumentSearchPage } from "../pages/document-search.page";
+import { DocumentSearchPage } from "../pages/playwright/document-search.page";
 import { test as base } from '@playwright/test';
 
 type BaseFixture = {
