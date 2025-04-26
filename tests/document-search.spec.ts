@@ -1,4 +1,5 @@
-import test, { Page } from "@playwright/test";
+import { Page } from "@playwright/test";
+import { test, expect } from '../fixtures/base.fixture'
 import { documentSearchModel } from "../state-machines/playwright/document-search.machine";
 
 let page: Page;
@@ -6,10 +7,6 @@ let page: Page;
 test.describe('Playwright document search', () => {
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-    });
-
-    test.beforeEach(async () => {
-        await page.goto('https://playwright.dev/');
     });
 
     test.afterAll(async ({ browser }) => {
@@ -20,8 +17,8 @@ test.describe('Playwright document search', () => {
     const testPlans = documentSearchModel.getSimplePathPlans();
     testPlans.forEach((plan, _) => {
         plan.paths.forEach((path, _) => {
-            test(path.description, async () => {
-                await path.test(page);
+            test(path.description, async ({documentSearchPage}) => {
+                await path.test(documentSearchPage);
             })
         })
     });

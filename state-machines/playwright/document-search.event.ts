@@ -1,20 +1,20 @@
 import { Page } from "@playwright/test";
-import { DocumentSearch } from "../../pages/document-search.page";
+import { DocumentSearchPage } from "../../pages/document-search.page";
 
 const documentSearchEvent = ({
-    PERFORM_SEARCH: async (page: Page) => {
+    PERFORM_SEARCH: async (documentSearchPage: DocumentSearchPage) => {
         const validSearchTerm = 'Text selector';
-        let documentSearch = new DocumentSearch(page);
-        await documentSearch.searchTerm(validSearchTerm);
+        // let documentSearch = new DocumentSearchPage(page);
+        await documentSearchPage.searchTerm(validSearchTerm);
     },
-    PERFORM_INVALID_SEARCH: async (page: Page) => {
+    PERFORM_INVALID_SEARCH: async (documentSearchPage: DocumentSearchPage) => {
         const invalidSearchTerm = 'pztr';
-        let documentSearch = new DocumentSearch(page);
-        await documentSearch.searchTerm(invalidSearchTerm);
+        // let documentSearch = new DocumentSearchPage(page);
+        await documentSearchPage.searchTerm(invalidSearchTerm);
     },
-    RESET_SEARCH: async (page: Page) => {
-        let documentSearch = new DocumentSearch(page);
-        await documentSearch.navigate();
+    RESET_SEARCH: async (documentSearchPage: DocumentSearchPage) => {
+        // let documentSearch = new DocumentSearchPage(page);
+        await documentSearchPage.navigate();
     },
 });
 
