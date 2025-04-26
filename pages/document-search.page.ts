@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 
-export class DocumentSearch {
+export class DocumentSearchPage {
     readonly page: Page;
 
     readonly searchInput: Locator;

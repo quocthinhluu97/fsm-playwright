@@ -25,6 +25,7 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
     // Record test steps for better debugging
     testIdAttribute: 'data-testid',
+    headless: false,
   },
   projects: [
     {

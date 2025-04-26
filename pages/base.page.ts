@@ -2,7 +2,7 @@ import { Page } from '@playwright/test';
 import { MenuComponent } from './menu.component';
 
 export class BasePage {
-    protected page: Page;
+    readonly page: Page;
     readonly menu: MenuComponent;
     constructor(page: Page) {
         this.page = page;

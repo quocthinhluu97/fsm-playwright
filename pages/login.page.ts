@@ -13,6 +13,7 @@ export class LoginPage extends BasePage {
 
     constructor(page: Page) {
         super(page);
+        this.page = page;
     }
 
     async login(username: string, password: string) {
@@ -28,5 +29,9 @@ export class LoginPage extends BasePage {
 
     async isLoggedOut() {
         return await this.page.isVisible(this.loginButton);
+    }
+
+    async navigate() {
+        await this.page.goto('https://www.saucedemo.com/');
     }
 } 
