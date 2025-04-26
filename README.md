@@ -9,7 +9,7 @@ Model based testing is using State machine library XState, Playwright and the UI
 Install the dependencies and run playwright tests
 
 ```sh
-cd model-based-tests-with-playwright
+cd fsm-playwright
 npm install
 npx playwright test
 ```
